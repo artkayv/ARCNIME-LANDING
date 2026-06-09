@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARCNIME /select</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    :root {
+      --bg-main: #000000;
+      --bg-card: #0a0a0a;
+      --border-color: #222222;
+      --text-main: #ffffff;
+      --text-muted: #888888;
+      --accent-yellow: #ffcc00;
+      --status-online: #22c55e;
+      --status-offline: #ef4444;
+      --status-checking: #888888;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(255, 204, 0, 0.03);
+    }
+
+    header {
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo-wrapper {
+      margin-bottom: 20px;
+    }
+
+    .logo-wrapper svg {
+      width: 80px;
+      height: 80px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .mini-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: #000000; 
+      background: var(--accent-yellow);
+      padding: 3px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .description {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .server-selection {
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-yellow);
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .server-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .server-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      background: #111111;
+      color: var(--accent-yellow);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      letter-spacing: 1px;
+    }
+
+    .server-badge:hover {
+      background: var(--accent-yellow);
+      border-color: var(--accent-yellow);
+      color: #000000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 204, 0, 0.15);
+    }
+
+    .status-container {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--status-checking);
+      transition: color 0.3s ease;
+    }
+
+    .server-badge:hover .status-container {
+      color: #000000 !important;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--status-checking);
+      transition: all 0.3s ease;
+    }
+
+    .server-badge.online .status-container {
+      color: var(--status-online);
+    }
+    .server-badge.online .dot {
+      background-color: var(--status-online);
+      box-shadow: 0 0 8px var(--status-online);
+    }
+
+    .server-badge.offline .status-container {
+      color: var(--status-offline);
+    }
+    .server-badge.offline .dot {
+      background-color: var(--status-offline);
+      box-shadow: 0 0 8px var(--status-offline);
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+    .server-badge.checking .dot {
+      animation: pulse 1s infinite;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .hostname {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .footer-socials a {
+      transition: all 0.2s ease;
+      opacity: 0.8; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-socials a:hover {
+      opacity: 1; 
+      transform: scale(1.1); 
+    }
+
+    .footer-socials img {
+      border-radius: 50%;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 24px;
+      }
+      footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="logo-wrapper">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.5" />
+            </filter>
+          </defs>
+          <g transform="translate(50 50) scale(2.1) translate(-50 -50)">
+            <g filter="url(#shadow)">
+              <path fill="#FFFFFF" d="M 44 30 H 56 L 73 70 H 61 L 50 43 L 39 70 H 27 Z" />
+              <path fill="#FFD700" d="M 43 51 V 63 L 56 57 Z" />
+            </g>
+          </g>
+        </svg>
+      </div>
+      <h1>ARCNIME <span class="mini-text">/select</span></h1>
+      <p class="description">
+        A free, ad-supported anime streaming platform designed with a clean and minimal UI. The ads are subtle and kept to a minimum so they do not interfere with your playback experience. It utilizes 3rd-party APIs and streaming servers to aggregate content.
+      </p>
+    </header>
+
+    <section class="server-selection">
+      <h2>OFFICIAL MIRROR SERVER</h2>
+      <div class="server-grid">
+        <a href="https://x.artkayv.work" class="server-badge checking">
+          <span class="server-name">MIRROR</span>
+          <div class="status-container"><span class="dot"></span><span class="status-text">Checking...</span></div>
+        </a>
+        <a href="https://x.animiru.online" class="server-badge checking">
+          <span class="server-name">MIRROR 1</span>
+          <div class="status-container"><span class="dot"></span><span class="status-text">Checking...</span></div>
+        </a>
+        <a href="https://b.artkayv.work" class="server-badge checking">
+          <span class="server-name">MIRROR 2</span>
+          <div class="status-container"><span class="dot"></span><span class="status-text">Checking...</span></div>
+        </a>
+        <a href="https://b.animiru.online" class="server-badge checking">
+          <span class="server-name">MIRROR 3</span>
+          <div class="status-container"><span class="dot"></span><span class="status-text">Checking...</span></div>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="hostname" id="windowHostName">loading...</div>
+      
+      <div class="footer-socials" style="display: flex; gap: 16px;">
+        <a href="https://threads.net/@artkayv_" target="_blank" rel="noopener noreferrer">
+          <img src="https://www.google.com/s2/favicons?sz=32&domain=threads.net" alt="Threads" style="width: 24px; height: 24px;">
+        </a>
+        <a href="https://x.com/artkayv_" target="_blank" rel="noopener noreferrer">
+          <img src="https://www.google.com/s2/favicons?sz=32&domain=x.com" alt="X" style="width: 24px; height: 24px;">
+        </a>
+        <a href="https://github.com/artkayv" target="_blank" rel="noopener noreferrer">
+          <img src="https://www.google.com/s2/favicons?sz=32&domain=github.com" alt="GitHub" style="width: 24px; height: 24px;">
+        </a>
+        <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
+          <img src="https://www.google.com/s2/favicons?sz=32&domain=discord.com" alt="Discord" style="width: 24px; height: 24px;">
+        </a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const hostElement = document.getElementById("windowHostName");
+      const currentHost = window.location.hostname || "local.arcnime";
+      hostElement.textContent = currentHost;
+
+      const badges = document.querySelectorAll('.server-badge');
+      
+      const pingServer = async (badge) => {
+        const url = badge.getAttribute('href');
+        const statusText = badge.querySelector('.status-text');
+        const startTime = Date.now();
+
+        try {
+          await fetch(url, { mode: 'no-cors', cache: 'no-store' });
+          const ping = Date.now() - startTime;
+          
+          badge.classList.remove('checking', 'offline');
+          badge.classList.add('online');
+          statusText.textContent = `${ping}ms`;
+        } catch (error) {
+          badge.classList.remove('checking', 'online');
+          badge.classList.add('offline');
+          statusText.textContent = 'Offline';
+        }
+      };
+
+      badges.forEach(async (badge) => {
+        await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 500));
+        
+        await pingServer(badge);
+
+        setInterval(() => {
+          pingServer(badge);
+        }, 5000);
+      });
+    });
+  </script>
+
+</body>
+</html>
