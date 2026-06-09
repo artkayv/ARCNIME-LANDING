@@ -35,6 +35,5 @@ Since this project uses pure HTML/JS/CSS, there is no build step required.
 ## 🌐 Links
 
 * **Official Website:** [animiru.online](https://animiru.online)
-* **GitHub:** [@artkayv](https://github.com/artkayv)
 * **X (Twitter):** [@artkayv_](https://x.com/artkayv_)
 * **Threads:** [@artkayv_](https://threads.net/@artkayv_)
